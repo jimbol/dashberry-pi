@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Dashboard</title>
+    <script>
+
+    function setFocus() {
+        var iframe = document.getElementById("kallender");
+        iframe.contentWindow.focus();
+    }
+
+
+    </script>
+  </head>
+
+  <body onLoad="setFocus()">
+    <br>
+    <iframe id="kallender" src="https://calendar.google.com/calendar/embed?src=3ln77109mfliefkbtrd3utqlio%40group.calendar.google.com&ctz=America/Chicago" style="border: 0" width="800" height="600" frameborder="0" scrolling="no"></iframe>
+
+    <br>
+
+    <br>
+    <iframe style="align:left"id="forecast_embed" type="text/html" frameborder="0" height="245px" width="830px" src="http://forecast.io/embed/#lat=41.9279600&lon=-87.7032650&name=Logan Square"> </iframe>
+
+
+  </body>
+</html>
