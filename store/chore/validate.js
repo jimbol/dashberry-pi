@@ -2,7 +2,7 @@
 
 let valid = require('../valid');
 
-module.exports = valid.handler({
+module.exports = valid.defineSchema({
   label: valid.str({
     required: true,
     alpha: true,

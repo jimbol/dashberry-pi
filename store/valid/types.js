@@ -1,13 +1,20 @@
 'use strict';
 
-let validator = require('validator')
+let validator = require('validator');
 
 module.exports = {
+  /**
+    * Checks if is a valid mongo id.
+    * @method
+    * @param {object} args - Arguments from the schema definition
+  */
   mongoId: (args) => {
     let required = args.required;
     let many = args.many;
 
-    let validate = (value) => {
+    let validate = (value, options) => {
+      options = options || {};
+      let ignoreRequired = options.ignoreRequired;
 
     // handle list of ids
       if(many && Array.isArray(value)) {
@@ -17,7 +24,7 @@ module.exports = {
       }
 
     // Validate
-      if (required && value == null) {
+      if (required && !ignoreRequired && value == null) {
         return [false, value];
       }
 
@@ -37,12 +44,15 @@ module.exports = {
     let alpha = args.alpha;
     let encode = args.encode;
 
-    return (value) => {
+    return (value, options) => {
+      options = options || {};
+      let ignoreRequired = options.ignoreRequired;
 
     // Validate
-      if (required && value == null) {
+      if (required && !ignoreRequired && value == null) {
         return [false, value];
       }
+
 
       if (alpha && !validator.isAlphanumeric(value, 'en-US')) {
         return [false, value];
@@ -58,34 +68,6 @@ module.exports = {
       }
 
       return [true, value];
-    }
-  },
-
-  // TODO: throw better errors
-
-  handler: (schema) => {
-    return (obj) => {
-      let validatedObj = {};
-
-      for (let key in obj) {
-        let check = schema[key];
-        let value = obj[key];
-
-        // if there is no check for the key, dont include it
-        // otherwise, validate
-        if(check) {
-          let result = check(value);
-
-          if(!result[0]) { return false; }
-
-          validatedObj[key] = result[1];
-
-        } else {
-          return false;
-        }
-      }
-
-      return Object.freeze(validatedObj);
     }
   }
 };
