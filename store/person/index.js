@@ -5,7 +5,7 @@ let validate = require('./validate');
 
 function get(req, res) {
   let db = req.modules.db;
-  let collection = db.collection('chores');
+  let collection = db.collection('people');
 
   collection.find().toArray(function(err, items) {
     res.send(items);
@@ -20,7 +20,7 @@ function post(req, res){
   }
 
   let db = req.modules.db;
-  let collection = db.collection('chores');
+  let collection = db.collection('people');
 
   collection.insert(req.body, {w:1}, function(err, result) {
     res.send(result);
@@ -35,10 +35,10 @@ function put(req, res){
   }
 
   let db = req.modules.db;
-  let collection = db.collection('chores');
+  let collection = db.collection('people');
 
   collection.updateOne({
-    _id: ObjectId(req.body._id)
+    _id: new ObjectId(req.body._id)
   }, {
     $set: validObj
   }, function(err, result) {

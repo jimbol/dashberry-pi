@@ -6,7 +6,9 @@ let http = require('http').Server(app);
 let io = require('socket.io')(http);
 
 require('./middleware')(app);
-let choreStore = require('./store/chore');
+let validateChores = require('./store/chore/validate');
+let validatePeople = require('./store/person/validate');
+let createStore = require('./store');
 
 // Set up http
 http.listen(3000, function(){
@@ -18,11 +20,26 @@ app.get('/', function (req, res) {
   res.sendfile('index.html');
 });
 
+let choreStore = createStore('chores', validateChores);
 
-// mongo tester
 app.get('/chores', choreStore.get);
 app.post('/chores', choreStore.post);
 app.put('/chores', choreStore.put);
+
+
+
+
+// START HERE
+// people are not being validated properly
+// investigate why
+let personStore = createStore('people', validatePeople);
+
+app.get('/people', personStore.get);
+app.post('/people', personStore.post);
+app.put('/people', personStore.put);
+
+
+
 
 // // io stuff
 // io.on('connection', function (socket) {

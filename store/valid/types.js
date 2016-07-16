@@ -3,11 +3,7 @@
 let validator = require('validator');
 
 module.exports = {
-  /**
-    * Checks if is a valid mongo id.
-    * @method
-    * @param {object} args - Arguments from the schema definition
-  */
+
   mongoId: (args) => {
     let required = args.required;
     let many = args.many;
@@ -26,6 +22,10 @@ module.exports = {
     // Validate
       if (required && !ignoreRequired && value == null) {
         return [false, value];
+      }
+
+      if (!required && value == null) {
+        return [true, value];
       }
 
       if (!validator.isMongoId(value)) {
