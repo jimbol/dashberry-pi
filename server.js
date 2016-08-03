@@ -10,6 +10,7 @@ let validateChores = require('./store/chore/validate');
 let validatePeople = require('./store/person/validate');
 let createStore = require('./store');
 
+
 // Set up http
 http.listen(3000, function(){
   console.log('Listening on port 3000');
@@ -21,7 +22,6 @@ app.get('/', function (req, res) {
 });
 
 let choreStore = createStore('chores', validateChores);
-
 app.get('/chores', choreStore.get);
 app.post('/chores', choreStore.post);
 app.put('/chores', choreStore.put);
@@ -29,81 +29,15 @@ app.put('/chores', choreStore.put);
 
 
 
-// START HERE
+// TODO: START HERE
 // people are not being validated properly
 // investigate why
+
 let personStore = createStore('people', validatePeople);
 
 app.get('/people', personStore.get);
 app.post('/people', personStore.post);
 app.put('/people', personStore.put);
-
-
-
-
-// // io stuff
-// io.on('connection', function (socket) {
-
-//   socket.emit('chores', {
-//     chores: store.get('chores'),
-//     people: store.get('people')
-//   });
-
-//   socket.on('chores:set', function (data) {
-//     let updatedData = updateData(data);
-//     if(!updateData) { return; }
-
-//     let chores = updatedData.chores;
-//     let people = updatedData.people;
-
-//     store.set('chores', chores);
-//     store.set('people', people);
-
-//     io.emit('chores', {chores, people});
-
-//     console.log('Emit chores event');
-//   });
-// });
-
-// function updateData(data){
-
-//   let chores = data.chores;
-//   let staleChores = store.get('chores');
-//   let people = store.get('people');
-
-
-//   // clear people's chores
-//   for(let j = 0; j < people.length; j++){
-//     let person = people[j];
-//     person.chores = [];
-//   }
-
-
-//   // validate new data from client
-//   for(let i = 0; i < chores.length; i++) {
-
-//     let chore = chores[i];
-//     let staleChore = staleChores[i];
-
-//     people[chore.person].chores.push(i);
-
-//     if(chore.label !== staleChores[i].label) {
-//       console.log('[CHORE-SET-ERROR]', 'Chore order has changed');
-//       return;
-//     }
-
-//     if(chore.person === staleChores[i].person) { continue; }
-
-//     if(chore.person >= people.length){
-//       console.log('[CHORE-SET-ERROR]', '`person` value does not correspond with a person');
-//       return;
-//     }
-
-//   }
-
-
-//   return {chores, people};
-// }
 
 app.get('/assets/*', function (req, res) {
   res.sendfile('client/' + req.params[0]);

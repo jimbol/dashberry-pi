@@ -1,16 +1,17 @@
 Person =
-  # P1
   name: 'string'
   email: 'string'
   chore_ids: [ ObjectId(chore_id) ]
 
-  # P2
-  history_ids: [ ObjectId(history_id) ]
-
 Chore =
-  # P1
   label: 'string'
   person_id: ObjectId( person_id )
 
-  # P2
-  history_ids: [ ObjectId(history_id) ]
+List =
+  person_id: ObjectId( person_id )
+  title: 'string'
+  chore_ids: [ ObjectId(chore_id) ]
+
+Lists =
+  list_ids: [ ObjectId( list_id ) ]
+  person_id: ObjectId( person_id )

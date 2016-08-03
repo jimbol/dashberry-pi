@@ -14,15 +14,18 @@ function get(req, res, collectionName, validate) {
 function post(req, res, collectionName, validate){
   let validObj = validate.allPresent(req.body);
 
-  if (validObj) {
+  if (!validObj) {
     return res.status(403).send('Forbidden');
   }
 
   let db = req.modules.db;
   let collection = db.collection(collectionName);
 
-  collection.insert(req.body, {w:1}, function(err, result) {
-    res.send(result);
+  collection.insert(req.body, {w:1}, function(err, records) {
+    if(err) {
+      return res.status(500).send('There was an error adding the document.');
+    }
+    res.send(records.ops[0]);
   });
 }
 
