@@ -10,7 +10,7 @@ module.exports = function(app){
   app.use(connectToDatabase);
   app.use(bodyParser.json());
 
-  app.use('/chores', verifyUser);
+  app.use(verifyUser);
 
 }
 
@@ -21,17 +21,17 @@ function init(req, res, next) {
 
 function verifyUser(req, res, next) {
   let idToken = req.query.idToken || req.body.idToken
-  req.body = req.body.chore
+  console.log('[VALIDATING-USER]');
 
   // TODO
   // TODO Store token and user data as key value pairs somehow
   // TODO
 
-  verifier.verify(idToken, CLIENT_ID, function (err, tokenInfo) {
+  verifier.verify(idToken, CLIENT_ID, function (err, token) {
     if (err) {
       console.log('[USER-NOT-VERIFIED]', err);
     } else if (!err) {
-      req.user = tokenInfo
+      req.user = token
       console.log('[USER-VERIFIED]');
     }
 
@@ -40,9 +40,18 @@ function verifyUser(req, res, next) {
 }
 
 function connectToDatabase(req, res, next) {
+  // TODO
+  // TODO - Connect to DB at the highest level
+  // TODO - There should only be one DB for the whole app
+  // TODO
+  
   MongoClient.connect("mongodb://localhost:27017/chores", function(err, db){
-    console.log('[CONNECTED-TO-DB]')
-    req.modules.db = db
+    if (err) {
+      console.log('[NOT-CONNECTED-TO-DB]', err);
+    } else if (!err) {
+      req.modules.db = db
+      console.log('[CONNECTED-TO-DB]');
+    }
     next();
   });
 }
